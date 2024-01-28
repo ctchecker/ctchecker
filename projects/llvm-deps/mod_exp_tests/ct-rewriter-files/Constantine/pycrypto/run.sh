@@ -8,7 +8,7 @@ else
 fi
 
 COL=""
-MEM2REG=""
+MEM2REG="-mem2reg"
 
 COL+="WL"
 COL+="/FS"
@@ -70,7 +70,7 @@ PATTERN="/Constantine/[/a-zA-Z0-9_-]+"
 NAMEPREFIX=$(echo "$WORKINGPATH" | grep -E -o "$PATTERN")
 ROW="${NAMEPREFIX}/${NAME}"
 SCRIPTPATH="${LEVEL}/projects/llvm-deps/mod_exp_tests/ct-rewriter-files/collecting_results.py"
-RESULTPATH="${LEVEL}/projects/llvm-deps/mod_exp_tests/ct-rewriter-files/Constantine/results-noFLS.csv"
+RESULTPATH="${LEVEL}/projects/llvm-deps/mod_exp_tests/ct-rewriter-files/Constantine/results.csv"
 python $SCRIPTPATH tmp-$NAME.dat $RESULTPATH $ROW $TIME > $FILENAME
 
 # COL=$( echo 'tmp-'$COL'.dat' | tr '/' '-')
