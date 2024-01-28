@@ -1,24 +1,26 @@
 # CtChecker: a Precise, Sound and Efficient Static Analysis for Constant-Time Programming
 
-
 - [CtChecker: a Precise, Sound and Efficient Static Analysis for Constant-Time Programming](#ctchecker-a-precise-sound-and-efficient-static-analysis-for-constant-time-programming)
   - [Intro](#intro)
-  - [System Requirements](#system-requirements)
-  - [Building the Toolchain](#building-the-toolchain)
+  - [Building CtChecker from Source](#building-ctchecker-from-source)
+    - [System Requirements](#system-requirements)
+    - [Building the Toolchain](#building-the-toolchain)
+  - [Running Pre-built CtChecker with Docker](#running-pre-built-ctchecker-with-docker)
   - [Running the Cryptographic Library Benchmark](#running-the-cryptographic-library-benchmark)
-  - [Running the Benchemark on Rewritten Code by Constantine](#running-the-benchemark-on-rewritten-code-by-constantine)
+  - [Running the Benchmark on Rewritten Code by Constantine](#running-the-benchmark-on-rewritten-code-by-constantine)
   - [Running the Comparison with SC-Eliminator on Their Benchmarks](#running-the-comparison-with-sc-eliminator-on-their-benchmarks)
-
 
 ## Intro
 
-This is the benchmark repo for the peer-reviewed submission of the paper. The repo has been anonymized for review purposes. A walkthrough of how to use the benchmark and reproduce the results in the paper will be provided in the following sections. All source code are provided for the benchmark libraries and the rewritten code by Constantine.
+This is the benchmark repo for the peer-reviewed submission of the paper. The repo has been anonymized for review purposes. A walkthrough of how to use the benchmark and reproduce the results in the paper will be provided in the following sections. All source code are provided for the benchmark libraries, the rewritten code by Constantine, and the benchmarks from SC-Eliminator. There are two options to run CtChecker, building it from source or running pre-built tool with Docker.
 
-## System Requirements
+## Building CtChecker from Source
+
+### System Requirements
 
 We've been building the system under Ubuntu 18.04, which provides the best compatibility of softwares used and convenience in compiling the version of Linux we are analyzing. The instructions in this documentation assumes the user is running this version of Ubuntu Linux.
 
-## Building the Toolchain
+### Building the Toolchain
 
 1. Before building, make sure to check:
 
@@ -48,7 +50,26 @@ cd ../llvm-deps/
 make
 ```
 
+## Running Pre-built CtChecker with Docker
+
+Make sure Docker has been correctly installed on the test machine. The docker image is available on [DockerHub](https://hub.docker.com/r/ctchecker/ctchecker). Get the container running with the following commands.
+
+```sh
+# Pull Docker image from DockerHub
+docker pull ctchecker/ctchecker:latest
+
+# Run a container with the image
+docker run --name ctchecker -dit ctchecker/ctchecker
+
+# Get into the container's bash
+docker exec -it ctchecker bash
+```
+
+Inside the container, the artifiact is located at `/artifact/ctchecker`.
+
 ## Running the Cryptographic Library Benchmark
+
+If CtChecker is built from source, `PATH_TO_LLVM_DIR` refers to the root directory of the source code. For the container, it refers to `/artifact/ctchecker`.
 
 ```sh
 # Direct to the benchmark folder
@@ -58,9 +79,10 @@ cd /PATH_TO_LLVM_DIR/projects/llvm-deps/mod_exp_tests
 # This script runs all four crypto libraries and their variations for comparison with ct-verif
 ./runall.sh
 ```
+
 The results for this benchmark located under the directory `/PATH_TO_LLVM_DIR/projects/llvm-deps/mod_exp_tests/results`, where four sub-folder will be created. The `full` folder is for full source versions, `min` for the minimal source versions, `ct_verif_files` for ct-verif's minimal source code versions, and `ct_verif_files_full` for ct-verif's full source code version.
 
-## Running the Benchemark on Rewritten Code by Constantine
+## Running the Benchmark on Rewritten Code by Constantine
 
 ```sh
 # Direct to the benchmark folder
@@ -71,7 +93,7 @@ cd /PATH_TO_LLVM_DIR/projects/llvm-deps/mod_exp_tests/ct-rewriter-files/Constant
 ./test.sh
 ```
 
-The results for Constantine rewritten code are located under each algorithm's own folder. The aggregated result will be created under Constantine root folder.
+The results for Constantine rewritten code are located under each algorithm's own folder. The aggregated result will be created under Constantine root folder with name `results.csv`.
 
 ## Running the Comparison with SC-Eliminator on Their Benchmarks
 
@@ -84,4 +106,4 @@ cd /PATH_TO_LLVM_DIR/projects/llvm-deps/mod_exp_tests/ct-rewriter-files/SC-Elimi
 ./test.sh
 ```
 
-The results are collected under "SC-Eliminator-original" folder, named "results-ctchecker.csv".
+The results are collected under `SC-Eliminator-original` folder, named `results-ctchecker.csv`.
